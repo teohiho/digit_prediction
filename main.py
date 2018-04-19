@@ -41,7 +41,7 @@ def loadMnistData():
             images[i] = np.array(struct.unpack_from(fmt, data_img, offset))
            
             # images[i] = images[i]/256
-            images[i] = images[i]/256
+            images[i] = images[i]
             offset += struct.calcsize(fmt)
 
 
@@ -82,7 +82,7 @@ def train_model():
 
     # test
     print("Bắt đầu test!")
-    pickle.dump(classifier, open("handwrite_model", 'wb'))
+    pickle.dump(classifier, open("handwrite_model_kochia", 'wb'))
 
     #cho ra các label của test gọp lại thành mảng
     predictions = classifier.predict(test_data[0])
@@ -133,9 +133,9 @@ def show_image(img):
 
 
 ####-----------------------
-# train_model()
+train_model()
 # test_model()
-training_data, test_data = loadMnistData()
+# training_dat,a test_data = loadMnistData()
 # print(test_data[1][221:400])
 # print(test_data[0][45])
 # show_image(test_data[0][45])
