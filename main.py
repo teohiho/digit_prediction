@@ -40,8 +40,8 @@ def loadMnistData():
         for i in range(items):
             images[i] = np.array(struct.unpack_from(fmt, data_img, offset))
            
-            # images[i] = images[i]/256
-            images[i] = images[i]
+            images[i] = images[i]/256
+            # images[i] = images[i]
             offset += struct.calcsize(fmt)
 
 
@@ -82,7 +82,7 @@ def train_model():
 
     # test
     print("Bắt đầu test!")
-    pickle.dump(classifier, open("handwrite_model_kochia", 'wb'))
+    pickle.dump(classifier, open("handwrite_model", 'wb'))
 
     #cho ra các label của test gọp lại thành mảng
     predictions = classifier.predict(test_data[0])
@@ -109,6 +109,7 @@ def test_model():
     result = classifier.score(test_data[0], test_data[1])
     print(result)
 
+
 def predict_image(img):
     logo = img
     if type(img) is str:
@@ -120,9 +121,33 @@ def predict_image(img):
     print("RESULT %r" % result)
     return result
 
+
+def image_predict_image(img):
+    logo = img
+    if type(img) is str:
+        logo = io.imread(img)
+    classifier = pickle.load(open("handwrite_model", 'rb'))
+    logo_train = logo.reshape(1, -1)
+ 
+    logo_train_chia = [[0 for _ in range(784)]]
+    # print("logo_train[0][234]):",logo_train[0][234]/256)
+    for i in range(783):
+        logo_train_chia[0][i] = logo_train[0][i] / 256
+
+    show_image(logo)
+    # print("logo_train:", logo_train_chia[0])
+
+    result = classifier.predict(logo_train_chia)
+    print("RESULT %r" % result)
+    return result
+
+
 def show_image(img):
-    logo = img.reshape(28, 28)
+    logo = img.reshape(3, 784)
+    # img = np.arange(2352).reshape(3, 784 )
+    # logo = img.reshape((img.shape[0]*1, 28, 28))
     print(logo.shape)
+    print(len(logo[0]))
     for i in range(logo.shape[0]):
         for j in range(logo.shape[1]):
             if logo[i][j] > 0.0:
@@ -131,13 +156,34 @@ def show_image(img):
                 print("-", end="");
         print()
 
+# def show_image1(img):
+#     logo = img
+#     if type(img) is str:
+#         logo = io.imread(img)
+
+#     show_image(logo)
+
+
+    
+
 
 ####-----------------------
-train_model()
+#-------- De train du lieu----------------------
+# train_model()
+#-------- 
 # test_model()
-# training_dat,a test_data = loadMnistData()
+#-------- Doc du lieu tu bo du lieu MNist--------
+training_data, test_data = loadMnistData()
+
+#--------
 # print(test_data[1][221:400])
 # print(test_data[0][45])
 # show_image(test_data[0][45])
-predict_image(test_data[0][3775])
-# predict_image("/home/teo/STUDY/images/image_90.jpg")
+
+#-------- Doan anh la so nao? -------------------
+# predict_image(test_data[0][10])
+
+#-------- Chia anh cho 256 roi Doan anh la so nao------
+# image_predict_image("/home/teo/STUDY/temp.jpg")
+
+image_predict_image("/home/teo/STUDY/temp.jpg")

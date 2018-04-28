@@ -1,0 +1,50 @@
+/*Styles start*/
+body{
+    width: 100%;
+    height: 100%;
+    animation: animatedBackground 30s linear infinite;
+    font-weight: 800;
+    text-shadow: 4px 8px 12px gray;
+    font-family: "Gill Sans MT Condensed", "Copperplate Gothic Bold", Consolas, monospace;
+}
+@keyframes animatedBackground {
+    4%   {background: url(http://savepic.net/8315878.png);}
+    65%  {background: url(http://savepic.net/8322022.png);}
+}
+#sketchClearButton {
+    width: 100px;
+    height: 48px;
+    background: linear-gradient(skyblue, deepskyblue, blue, mediumblue, darkblue);
+    font-weight: 900;
+}
+#sketchRecogniseButton{
+    width: 100px;
+    height: 48px;
+    background: linear-gradient(lightpink, pink, lightcoral, coral, orange);
+    font-weight: 900;
+}
+#container {
+    position:relative;
+    left: 28%;
+    width: 800px;
+}
+#sketchpad {
+    border:8px solid deeppink;
+}
+#thumbnail {
+    border: 1px solid #077;
+}
+#result {
+    font-size: 128pt; /* Размер шрифта в пунктах */
+    float: right;
+    width: 280px;
+    height: 280px;
+    border:8px solid deepskyblue;
+    background: lightgray;
+    text-align: center;
+    line-height: 280px;
+}
+.button-area{
+    position: relative;
+    padding: 10%;
+    left
