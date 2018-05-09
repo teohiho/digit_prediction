@@ -125,25 +125,32 @@ def predict_image(img):
 def image_predict_image(img):
     logo = img
     if type(img) is str:
-        logo = io.imread(img)
+        logo = io.imread(img, as_grey=True)
     classifier = pickle.load(open("handwrite_model", 'rb'))
-    logo_train = logo.reshape(1, -1)
- 
-    logo_train_chia = [[0 for _ in range(784)]]
+    logo_train = (logo*256).reshape(1, -1)
+    total_pixel = 28*28
+    logo_train_chia = [[0 for _ in range(total_pixel)]]
     # print("logo_train[0][234]):",logo_train[0][234]/256)
-    for i in range(783):
+    for i in range(total_pixel):
         logo_train_chia[0][i] = logo_train[0][i] / 256
 
     show_image(logo)
-    # print("logo_train:", logo_train_chia[0])
+    
+    # print("Printing feature vector")
+    # for i in range(len(logo_train_chia)):
+    #     for j in range(len(logo_train_chia[0])):
+    #         print("{} ".format(logo_train_chia[i][j]))
 
+    # print("End")
+    # print("logo_train:", logo_train_chia[0])
+    # print(logo_train_chia)
     result = classifier.predict(logo_train_chia)
     print("RESULT %r" % result)
     return result
 
 
 def show_image(img):
-    logo = img.reshape(3, 784)
+    logo = img.reshape(28, 28)
     # img = np.arange(2352).reshape(3, 784 )
     # logo = img.reshape((img.shape[0]*1, 28, 28))
     print(logo.shape)
@@ -184,6 +191,10 @@ training_data, test_data = loadMnistData()
 # predict_image(test_data[0][10])
 
 #-------- Chia anh cho 256 roi Doan anh la so nao------
-# image_predict_image("/home/teo/STUDY/temp.jpg")
+# image_predict_image("/home/admin/teo/images/image_0.jpg")
 
-image_predict_image("/home/teo/STUDY/temp.jpg")
+
+image_predict_image("/home/admin/teo/digit_prediction/sandbox/temp.jpg")
+
+# logo = io.imread("/home/admin/teo/digit_prediction/sandbox/temp.jpg",as_grey=True)
+# print(logo.shape)       #28*28
