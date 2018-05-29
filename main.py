@@ -1,12 +1,19 @@
 import numpy as np
 import timeit
+
 from sklearn import svm
 import matplotlib.pyplot as plt
 import struct       #modun dung de dinh dạng ban ghi nhi phan , giai nen du lieu #https://www.geeksforgeeks.org/struct-module-python/
 import timeit
 import pickle
 from skimage import io
+from scipy import misc
+#------
+import paint as paint
+import tkinter as tk
 
+from PIL import Image, ImageDraw
+#------
 
 TRAIN_ITEMS = 60000
 TEST_ITEMS = 10000
@@ -171,7 +178,15 @@ def show_image(img):
 #     show_image(logo)
 
 
-    
+
+###--paint
+root=tk.Tk()
+root.wm_geometry("%dx%d+%d+%d" % (400, 400, 10, 10))
+root.config(bg='white')
+paint.ImageGenerator(root,10,10)
+root.mainloop()
+###--end
+
 
 
 ####-----------------------
@@ -180,7 +195,7 @@ def show_image(img):
 #-------- 
 # test_model()
 #-------- Doc du lieu tu bo du lieu MNist--------
-training_data, test_data = loadMnistData()
+# training_data, test_data = loadMnistData()
 
 #--------
 # print(test_data[1][221:400])
@@ -193,8 +208,14 @@ training_data, test_data = loadMnistData()
 #-------- Chia anh cho 256 roi Doan anh la so nao------
 # image_predict_image("/home/admin/teo/images/image_0.jpg")
 
+#dung
+# image_predict_image("/home/teo/STUDY/digit_prediction/temp.jpg")
 
-image_predict_image("/home/admin/teo/digit_prediction/sandbox/temp.jpg")
 
-# logo = io.imread("/home/admin/teo/digit_prediction/sandbox/temp.jpg",as_grey=True)
+
+
+#thu
+# logo = io.imread("/home/teo/STUDY/digit_prediction/temp.jpg", as_grey=True)
+# logo1 = misc.imresize(logo, (28,28))
+# image_predict_image(logo1)
 # print(logo.shape)       #28*28
