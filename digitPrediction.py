@@ -7,13 +7,8 @@ import struct       #modun dung de dinh dạng ban ghi nhi phan , giai nen du li
 import timeit
 import pickle
 from skimage import io
-from scipy import misc
-#------
-import paint as paint
-import tkinter as tk
 
-from PIL import Image, ImageDraw
-#------
+
 
 TRAIN_ITEMS = 60000
 TEST_ITEMS = 10000
@@ -129,46 +124,49 @@ def predict_image(img):
     return result
 
 
-def image_predict_image(img):
-    logo = img
-    if type(img) is str:
-        logo = io.imread(img, as_grey=True)
-    classifier = pickle.load(open("handwrite_model", 'rb'))
-    logo_train = (logo*256).reshape(1, -1)
-    total_pixel = 28*28
-    logo_train_chia = [[0 for _ in range(total_pixel)]]
-    # print("logo_train[0][234]):",logo_train[0][234]/256)
-    for i in range(total_pixel):
-        logo_train_chia[0][i] = logo_train[0][i] / 256
+# def image_predict_image(img):
+#     logo = img
+#     if type(img) is str:
+#         logo = io.imread(img, as_grey=True)
+#     classifier = pickle.load(open("handwrite_model", 'rb'))
+#     logo_train = (logo*256).reshape(1, -1)
+#     total_pixel = 28*28
+#     logo_train_chia = [[0 for _ in range(total_pixel)]]
+#     for i in range(total_pixel):
+#         logo_train_chia[0][i] = logo_train[0][i] / 256
 
-    show_image(logo)
-    
-    # print("Printing feature vector")
-    # for i in range(len(logo_train_chia)):
-    #     for j in range(len(logo_train_chia[0])):
-    #         print("{} ".format(logo_train_chia[i][j]))
+#     show_image(logo)
 
-    # print("End")
-    # print("logo_train:", logo_train_chia[0])
-    # print(logo_train_chia)
-    result = classifier.predict(logo_train_chia)
-    print("RESULT %r" % result)
-    return result
+#     result = classifier.predict(logo_train_chia)
+#     print("RESULT %r" % result)
+#     return result[0]
 
 
-def show_image(img):
-    logo = img.reshape(28, 28)
-    # img = np.arange(2352).reshape(3, 784 )
-    # logo = img.reshape((img.shape[0]*1, 28, 28))
-    print(logo.shape)
-    print(len(logo[0]))
-    for i in range(logo.shape[0]):
-        for j in range(logo.shape[1]):
-            if logo[i][j] > 0.0:
-                print("@", end="");
-            else:
-                print("-", end="");
-        print()
+# def show_image(img):
+#     logo = img.reshape(28, 28)
+#     print(logo.shape)
+#     print(len(logo[0]))
+#     for i in range(logo.shape[0]):
+#         for j in range(logo.shape[1]):
+#             if logo[i][j] > 0.0:
+#                 print("@", end="");
+#             else:
+#                 print("-", end="");
+#         print()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # def show_image1(img):
 #     logo = img
@@ -179,13 +177,7 @@ def show_image(img):
 
 
 
-###--paint
-root=tk.Tk()
-root.wm_geometry("%dx%d+%d+%d" % (400, 400, 10, 10))
-root.config(bg='white')
-paint.ImageGenerator(root,10,10)
-root.mainloop()
-###--end
+
 
 
 

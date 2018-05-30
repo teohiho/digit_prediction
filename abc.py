@@ -1,3 +1,0 @@
-import paint
-import main
-
