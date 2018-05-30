@@ -12,6 +12,9 @@ from tkinter import messagebox
 import os
 import PIL.ImageOps 
 
+import os.path
+
+
 ####
 import numpy as np
 import timeit
@@ -31,6 +34,7 @@ def  browsefunc():
     filename = filedialog.askopenfilename(filetypes=ftypes, defaultextension='.jpg')    # stores the path of the file
     global img
     img = cv2.imread(filename,0)
+    print("filename:" , filename)
     
      
 
@@ -114,9 +118,9 @@ class ImageGenerator:
     def motion(self,event):
         if self.b1 == "down":
             if self.xold is not None and self.yold is not None:
-                event.widget.create_line(self.xold,self.yold,event.x,event.y,smooth='true',width=7,fill='white')
+                event.widget.create_line(self.xold,self.yold,event.x,event.y,smooth='true',width=5,fill='white')
                 self.coords.append((self.xold,self.yold))
-                self.draw.line(((self.xold,self.yold),(event.x,event.y)),(255,255,255),width=7)
+                self.draw.line(((self.xold,self.yold),(event.x,event.y)),(255,255,255),width=5)
 
         self.xold = event.x
         self.yold = event.y
@@ -126,6 +130,25 @@ if __name__ == "__main__":
     root.config(bg='white')
     ImageGenerator(root,40,40)
    
+def dilate():
+    global filename
+    print("filename_dddd:", filename)
+    img = cv2.imread(filename, 0)
+    kernel = np.ones((5,5),np.float32)
+
+    # img_erosion = cv2.erode(img, kernel, iterations=1)
+    img_dilation = cv2.dilate(img, kernel, iterations=1)
+    print('Dilation', img_dilation)
+    # cv2.imshow('Input', img)
+    # cv2.imshow('Erosion', img_erosion)
+    # cv2.imshow('Dilation', img_dilation)
+
+    file = os.path.relpath(filename, "/home/teo/STUDY/digit_prediction/images_test")
+    print("filename_ddddkdfjdslfjdl:", filename)
+    cv2.imwrite("/home/teo/STUDY/digit_prediction/images_test/"+"dilate_"+ file,img_dilation)
+    cv2.waitKey(0)
+
+
 
 def image_predict_image():
     global img
@@ -174,9 +197,12 @@ def show_image(img):
         print()
 
 training_data, test_data = DP.loadMnistData()
+dilateButton = Button(f, text="Dilate", background= "white",fg="red", command=dilate)
+dilateButton.pack(side=LEFT)
 button=Button(f,text="Prediciton!",width=40,bg='white',command=image_predict_image)
 button.pack(side=LEFT)
 quitButton = Button(f, text="Quit", background= "white",fg="red", command=f.quit)
-button.pack(side=LEFT)
+quitButton.pack(side=LEFT)
+
 root.geometry("550x550")
 root.mainloop()
