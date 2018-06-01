@@ -1,10 +1,7 @@
 
-from __future__ import division, print_function, absolute_import
 import digitPrediction as DP
-import scipy
 import numpy as np
 import cv2
-from keras.models import model_from_json
 from tkinter import *
 from tkinter import filedialog
 from PIL import Image, ImageDraw
@@ -14,36 +11,26 @@ import PIL.ImageOps
 
 import os.path
 
-
-####
-import numpy as np
-import timeit
-
-from sklearn import svm
-import matplotlib.pyplot as plt
-import struct       #modun dung de dinh dạng ban ghi nhi phan , giai nen du lieu #https://www.geeksforgeeks.org/struct-module-python/
-import timeit
 import pickle
 from skimage import io
 ####################################### BROWSE ###########################################
-root = Tk() #interface
+root = Tk() 
 def  browsefunc():
     global filename 
     ftypes = [('Image file', '.jpg'), ('PNG file', '.png'), ('All files', '*')]
         
-    filename = filedialog.askopenfilename(filetypes=ftypes, defaultextension='.jpg')    # stores the path of the file
+    filename = filedialog.askopenfilename(filetypes=ftypes, defaultextension='.jpg')    
     global img
     img = cv2.imread(filename,0)
     print("filename:" , filename)
     
      
 
- #image is taken as input
+
 f = Frame(root, height=200, width=400, background="white") # a frame is created for GUI
 f.pack() # pack is used to display on the screen
 
 browsebutton = Button(f, text="Browse", background="white",fg="black", command=browsefunc) 
-
 browsebutton.pack(side=LEFT) #position of the button
 
 label = Label(root)
@@ -71,21 +58,11 @@ class ImageGenerator:
         self.button.pack(side=LEFT)
         self.button1=Button(self.parent,text="Clear!",width=10,bg='white',command=self.clear)
         self.button1.pack(side=LEFT)      
-        # self.result = tk.Label(self.parent)
-        # self.result.place(x=(self.sizex),y=self.sizey+80)     
-        # self.button2=tk.Button(self.parent,text="Du doan",width=10,bg='white',command=self.clear)
-        # self.button2.place(x=(self.sizex/7)+80+80+20,y=self.sizey+20)  
-
-        # root = tk.Tk()
-        # tk.Button(root, text="Quit", command=lambda root=root:quit(root)).pack()
-        # root.mainloop()
-
-
 
         self.image=Image.new("RGB",(200,200),(0,0,0))
         # self.image = self.image.resize((28, 28))
         self.draw=ImageDraw.Draw(self.image)
-###################################################### saving the image ###############################
+#################################### saving the image ###############################
     def save(self):
         filename2 = filedialog.asksaveasfile()
         self.image.save(filename2)
@@ -98,7 +75,7 @@ class ImageGenerator:
         inverted_image = PIL.ImageOps.invert(image)
         inverted_image.save('result.jpg')
 
-##################################################### clear the paintbox ###############################
+#################################### clear the paintbox ###############################
     def clear(self):
         self.drawing_area.delete("all")
         self.image=Image.new("RGB",(200,200),(0,0,0))
@@ -129,7 +106,8 @@ if __name__ == "__main__":
     root.wm_geometry("%dx%d+%d+%d" % (400, 400, 10, 10))
     root.config(bg='white')
     ImageGenerator(root,40,40)
-   
+
+########################################### Dilate ######################################
 def dilate():
     global filename
     print("filename_dddd:", filename)
@@ -142,40 +120,36 @@ def dilate():
     # cv2.imshow('Input', img)
     # cv2.imshow('Erosion', img_erosion)
     # cv2.imshow('Dilation', img_dilation)
-
     file = os.path.relpath(filename, "/home/teo/STUDY/digit_prediction/images_test")
     print("filename_ddddkdfjdslfjdl:", filename)
     cv2.imwrite("/home/teo/STUDY/digit_prediction/images_test/"+"dilate_"+ file,img_dilation)
     cv2.waitKey(0)
 
-
-
+########################################### Predict Image ######################################
 def image_predict_image():
     global img
     img = cv2.resize(img,(28, 28)).astype(np.float32)
-    print(img)
+    print("img:",img)
     img = np.expand_dims(img, axis=0)
     img = np.expand_dims(img, axis=3)
     logo = img
     if type(img) is str:
         logo = io.imread(img, as_grey=True)
+
+    print("logo:", logo)
     classifier = pickle.load(open("handwrite_model", 'rb'))
     logo_train = (logo).reshape(1, -1)
+    print("logo_train:", logo_train)
     total_pixel = 28*28
     logo_train_chia = [[0 for _ in range(total_pixel)]]
+    
     for i in range(total_pixel):
         logo_train_chia[0][i] = logo_train[0][i] / 256
-
+    print("logo_train_chia:", logo_train_chia)
     show_image(logo)
-
     result = classifier.predict(logo_train_chia)
     print("The predicted number is :")
     print(result[0])
-    # print("RESULT %r" % result)
-
-
-
-    # return result[0]
 
     w = Message(root, background="white", text=result[0])
     w.pack(side=BOTTOM)
@@ -184,6 +158,7 @@ def image_predict_image():
     m.pack(side=BOTTOM)
 
 
+############################################3 Show image on Console ##############################
 def show_image(img):
     logo = img.reshape(28, 28)
     print(logo.shape)
@@ -195,6 +170,8 @@ def show_image(img):
             else:
                 print("-", end="");
         print()
+
+
 
 training_data, test_data = DP.loadMnistData()
 dilateButton = Button(f, text="Dilate", background= "white",fg="red", command=dilate)

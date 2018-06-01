@@ -2,12 +2,9 @@ import numpy as np
 import timeit
 
 from sklearn import svm
-import matplotlib.pyplot as plt
 import struct       #modun dung de dinh dạng ban ghi nhi phan , giai nen du lieu #https://www.geeksforgeeks.org/struct-module-python/
-import timeit
 import pickle
 from skimage import io
-
 
 
 TRAIN_ITEMS = 60000
@@ -18,6 +15,7 @@ TEST_ITEMS = 10000
 # t10k-labels-idx1-ubyte: nhãn thiết lập thử
 #Tập huấn luyện có 60000, bài kiểm tra 10000
 
+######################################## Read data MNIST ##########################################
 def loadMnistData():
     mnist_data = []
     for img_file,label_file,items in zip(['data/train-images-idx3-ubyte','data/t10k-images-idx3-ubyte'],
@@ -66,20 +64,23 @@ def loadMnistData():
         mnist_data.append((images, labels.astype(int)))
     return mnist_data
 
-
+######################################## Train data ##########################################
 def train_model():
     start_time = timeit.default_timer()
-    # print(start_time) #19293.887149361
+    print("start_time: ", start_time) #19293.887149361
 
     training_data, test_data = loadMnistData()
+    print("training_data: ", training_data)
+    print("test_data: ", test_data)
+
     # train
     # classifier = svm.SVC()        #9443 trong  10000 gía trị đúng.
-    classifier = svm.SVC(C=200,kernel='rbf',gamma=0.01,cache_size=8000,probability=False) #9998 trong 10000 gía trị đúng.
+    classifier = svm.SVC(C=200,kernel='rbf',gamma=0.01,cache_size=8000,probability=False) #9824 trong 10000 gía trị đúng.
 
     # cho nó học từ images và label của data train
     classifier.fit(training_data[0], training_data[1])         
     train_time = timeit.default_timer()
-    # print(train_time)       #19672.935809503
+    print("train_time: ", train_time)       #19672.935809503
     print('gemfield train cost {}'.format(str(train_time - start_time) ) )
 
     # test
@@ -102,9 +103,11 @@ def train_model():
     # print("predictions", predictions)  # [7,2,1,..]
     print("%s trong %s gía trị đúng." % (num_correct, len(test_data[1])))      
 
-#     test_time = timeit.default_timer()
-#     print('gemfield test cost {}'.format(str(test_time - train_time) ) )          #gemfield test cost 206.6903916629999
+    test_time = timeit.default_timer()
+    print('gemfield test cost {}'.format(str(test_time - train_time) ) )          #gemfield test cost 206.6903916629999
 
+
+##################################### Pham tram test dat dua vao train data ##############################
 def test_model():
     classifier = pickle.load(open("handwrite_model", 'rb'))
     training_data, test_data = loadMnistData()
@@ -112,6 +115,7 @@ def test_model():
     print(result)
 
 
+##################################### Test image ##############################
 def predict_image(img):
     logo = img
     if type(img) is str:
@@ -123,6 +127,22 @@ def predict_image(img):
     print("RESULT %r" % result)
     return result
 
+
+def show_image(img):
+    logo = img.reshape(28, 28)
+    print(logo.shape)
+    print(len(logo[0]))
+    for i in range(logo.shape[0]):
+        for j in range(logo.shape[1]):
+            if logo[i][j] > 0.0:
+                print("@", end="");
+            else:
+                print("-", end="");
+        print()
+
+
+training_data, test_data = loadMnistData()
+predict_image(test_data[0][10])
 
 # def image_predict_image(img):
 #     logo = img
@@ -142,17 +162,7 @@ def predict_image(img):
 #     return result[0]
 
 
-# def show_image(img):
-#     logo = img.reshape(28, 28)
-#     print(logo.shape)
-#     print(len(logo[0]))
-#     for i in range(logo.shape[0]):
-#         for j in range(logo.shape[1]):
-#             if logo[i][j] > 0.0:
-#                 print("@", end="");
-#             else:
-#                 print("-", end="");
-#         print()
+
 
 
 
